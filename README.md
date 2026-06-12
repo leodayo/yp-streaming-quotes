@@ -4,7 +4,7 @@ Market data distribution system. It utilizes a hybrid network architecture: **TC
 
 ---
 
-## 📑 Protocol Specification & Format Rules
+## Protocol Specification & Format Rules
 
 ### 1. Data Format (UDP Datagram)
 The server streams market updates as plain text strings. **Each stock quote is strictly transmitted within a single UDP datagram.**
@@ -24,7 +24,7 @@ The server streams market updates as plain text strings. **Each stock quote is s
 
 ---
 
-## 🚀 Manual Execution & Verification Scenario
+## Manual Execution & Verification Scenario
 
 Follow these steps to run and verify the system in your terminal environment.
 
@@ -54,7 +54,7 @@ Terminate the first client in Terminal B (`Ctrl + C`).
 
 ---
 
-## 🧪 Tests
+## Tests
 Run the test suite validating quote serialization, contract protocols, and reading tickers from `impl Read`:
 ```bash
 cargo test
