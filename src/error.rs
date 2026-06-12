@@ -1,6 +1,6 @@
 use std::{error, fmt};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum QuoteParseError {
     InvalidFormat,
     InvalidField { field: &'static str, reason: String },
@@ -22,7 +22,7 @@ impl fmt::Display for QuoteParseError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum RequestError {
     InvalidCommand,
     InvalidUdpAddress,

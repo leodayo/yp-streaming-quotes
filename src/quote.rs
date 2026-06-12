@@ -27,7 +27,7 @@ impl str::FromStr for StockQuote {
     type Err = QuoteParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let fields: Vec<&str> = s.split("|").map(|s| s.trim()).collect();
+        let fields: Vec<&str> = s.split('|').map(|s| s.trim()).collect();
         if fields.len() != 4 {
             return Err(QuoteParseError::InvalidFormat);
         }
@@ -67,7 +67,6 @@ impl str::FromStr for StockQuote {
 mod tests {
 
     use super::*;
-    use std::str::FromStr;
 
     #[test]
     fn test_quote_round_trip() {
@@ -81,7 +80,7 @@ mod tests {
         let serialized = original.to_string();
         assert_eq!(serialized, "AAPL|150.5|1000|1718123654876");
 
-        let deserialized = StockQuote::from_str(&serialized);
+        let deserialized = serialized.parse::<StockQuote>();
         assert!(deserialized.is_ok());
         assert_eq!(deserialized.unwrap(), original);
     }
@@ -90,13 +89,13 @@ mod tests {
     fn test_quote_parse_errors() {
         let bad_format = "AAPL|150.5|1000";
         assert!(matches!(
-            StockQuote::from_str(bad_format),
+            bad_format.parse::<StockQuote>(),
             Err(QuoteParseError::InvalidFormat)
         ));
 
         let empty_ticker = "|150.5|1000|1718123654876";
         assert!(matches!(
-            StockQuote::from_str(empty_ticker),
+            empty_ticker.parse::<StockQuote>(),
             Err(QuoteParseError::InvalidField {
                 field: "ticker",
                 ..
@@ -105,7 +104,7 @@ mod tests {
 
         let bad_price = "AAPL|abc|1000|1718123654876";
         assert!(matches!(
-            StockQuote::from_str(bad_price),
+            bad_price.parse::<StockQuote>(),
             Err(QuoteParseError::InvalidField { field: "price", .. })
         ));
     }

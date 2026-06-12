@@ -8,14 +8,3 @@ clap = { version = "4.6", features = ["derive"] }
 env_logger = "0.11"
 log = "0.4"
 rand = "0.10"
-
-[lib]
-path = "src/lib.rs"
-
-[[bin]]
-name = "server"
-path = "src/bin/server.rs"
-
-[[bin]]
-name = "client"
-path = "src/bin/client.rs"

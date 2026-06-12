@@ -55,16 +55,16 @@ impl FromStr for Message {
 
         let parts: Vec<&str> = trimmed.splitn(3, ' ').collect();
 
+        if parts.len() < 2 {
+            return Err(RequestError::InvalidCommand);
+        }
+
         let udp_address: SocketAddr = parts[1]
             .parse()
             .map_err(|_| RequestError::InvalidUdpAddress)?;
 
         if parts.len() == 2 {
             return Err(RequestError::EmptyTickerList);
-        }
-
-        if parts.len() != 3 {
-            return Err(RequestError::InvalidCommand);
         }
 
         let tickers: HashSet<String> = parts[2]

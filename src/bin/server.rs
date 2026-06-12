@@ -192,10 +192,10 @@ fn handle_client(
             }
 
             info!("[SUBSCRIBE HANDLER] {} just subscribed", udp_address);
-            let _ = udp_server_socket.send_to(b"HELLO\n", udp_address);
             let response = format!("{}\n", Response::Ok);
             stream.write_all(response.as_bytes())?;
             stream.flush()?;
+            let _ = udp_server_socket.send_to(b"HELLO\n", udp_address);
         }
         Ok(Message::Ping) => {
             let response = format!("{}\n", Response::Error(RequestError::InvalidCommand));
@@ -228,7 +228,7 @@ fn run_broadcaster(subscribers: Subscribers, valid_tickers: Arc<HashSet<String>>
         let mut new_price = old_price * (1.0 + change_percent);
 
         if new_price < 1.0 {
-            new_price = 100.0;
+            new_price = 1000.0;
         }
         current_prices.insert(ticker.clone(), new_price);
 
@@ -241,7 +241,7 @@ fn run_broadcaster(subscribers: Subscribers, valid_tickers: Arc<HashSet<String>>
             ticker: ticker.clone(),
             price: new_price,
             volume,
-            timestamp_ms: current_timestamp_seconds(),
+            timestamp_ms: current_timestamp_millis(),
         };
 
         {
@@ -276,7 +276,7 @@ fn run_ping_handler(keep_alive: KeepAlive, udp_socket: Arc<UdpSocket>) {
                         Ok(guard) => guard,
                         Err(_) => {
                             error!(
-                                "[PING HANDLER] RwLock of Subscribers is poisoned. Shutting down.."
+                                "[PING HANDLER] RwLock of KeepAlive is poisoned. Shutting down.."
                             );
                             process::exit(1);
                         }
@@ -386,4 +386,11 @@ fn current_timestamp_seconds() -> u64 {
         .duration_since(UNIX_EPOCH)
         .expect("Backwards time flow isn't supported yet")
         .as_secs()
+}
+
+fn current_timestamp_millis() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("Backwards time flow isn't supported yet")
+        .as_millis() as u64
 }

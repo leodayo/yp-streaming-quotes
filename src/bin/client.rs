@@ -166,13 +166,8 @@ fn parse_tickers(args: &Args) -> Result<HashSet<String>, Box<dyn Error>> {
     if let Some(file_path) = &args.tickers_file {
         info!("[MAIN] Loading tickers from file: {}", file_path);
         let file = File::open(file_path)?;
-        match load_tickers(file) {
-            Ok(t) => Ok(t),
-            Err(e) => {
-                error!("[MAIN] Failed to load tickers from file: {}", e);
-                process::exit(1);
-            }
-        }
+        let t = load_tickers(file)?;
+        Ok(t)
     } else if let Some(tickers_vec) = &args.tickers {
         Ok(tickers_vec
             .iter()

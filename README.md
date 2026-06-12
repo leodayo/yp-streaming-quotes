@@ -55,7 +55,7 @@ Terminate the first client in Terminal B (`Ctrl + C`).
 ---
 
 ## 🧪 Tests
-Run the test suite validating quote serialization, contract protocols, and reading tickers from <impl Read>:
+Run the test suite validating quote serialization, contract protocols, and reading tickers from `impl Read`:
 ```bash
 cargo test
 ```
